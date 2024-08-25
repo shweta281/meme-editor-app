@@ -1,0 +1,16 @@
+*{
+    box-sizing: border-box;
+}
+.form{
+    margin: 0;
+    padding: 20px;
+}
+input, textarea{
+    margin-bottom:15px;
+    text-indent: 10px;
+    height:30;
+    border:1px solid #444;
+    display: block;
+    border-radius: 5px;
+    padding: 5px;
+}
