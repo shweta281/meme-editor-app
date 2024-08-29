@@ -1,94 +1,80 @@
-import React, {useState} from "react"
-import "../styles/Body.css"
-import memedata from "./memeData.js"
-import Counter from "./Counter.jsx"
+import React, { useEffect, useState } from "react";
+import "../styles/Body.css";
+// import memedata from "./memeData.js";
 
-export default function Body(){
-    // const [things, setthings]= React.useState(["thing1", "thing2"])
+export default function Body() {
+const [allMeme, setAllMeme]= useState([]);
 
-    // function addthings(){
-    //     const newthing="thing"+(things.length+1)
-    //     setthings(prevState=> [...prevState, newthing])
-    // }
-    
-    // const a= React.useState();
-    // console.log(a);
+// useEffect(() => {
+//     fetch("https://api.imgflip.com/get_memes")
+//       .then((res) => res.json())
+//       .then((data) => setAllMeme(data.data.memes));
+//   }, []);
 
-    // const [counter, setCounter]= React.useState(0);
-    
-    // function increment(){
-    //     setCounter(prevState=> prevState+1);
-    // }
-    // function decrement(){
-    //     setCounter(prevState=>prevState-1);
-    // }
-    // const url=memedata.data.memes[Math.floor(Math.random()*memedata.data.memes.length)].url
-    // const [image, getImage]= React.useState("")
-    // function getMeme(){
-    //     getImage( prevState=> url)
-    // }
-    // const [isgoingout, setIsgoinout]=React.useState(true);
-    // function going(){
-    //     setIsgoinout( prevState=> isgoingout^true )
-    // }
-    // let answer= isgoingout?"YES":"NO"
+useEffect( ()=> {
+  async function getWidth(){
+    const res= await fetch("https://api.imgflip.com/get_memes");
+    const data= await res.json();
+    // console.log(data);
+    setAllMeme(data.data.memes);
+  }
+  getWidth();
+}, [])
 
-    // const [arr, setArr] =useState(["thing1", "thing2"]);
-    
-    // function going(){
-    //     setArr( prevState=> [...prevState, "thingy"])
-    // }
+  const [meme, setMeme] = useState({
+    randomImage: "https://i.imgflip.com/1bij.jpg",
+    topText: "",
+    bottomText: "",
+  });
+  // console.log(allMeme);
 
-    // const [a,seta] = React.useState({
-    //     searchtext: "Search",
-    //     iconState: true
-    // })
-    // let newicon=a.iconState?"^~^":"0_0" 
-    // function func(){
-    //     seta(prevState=> {
-    //         return {
-    //             ...prevState,
-    //             iconState: prevState.iconState^true
+  function getMeme() {
+    const url =
+      allMeme[
+        Math.floor(Math.random() * allMeme.length)
+      ].url;
+    setMeme((prevState) => ({
+      ...prevState,
+      randomImage: url,
+    }));
+  }
 
-    //     }})
-    // }
-    // console.log(a);
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setMeme((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
 
-    const [meme, setMeme]= useState({ randomImage: "https://i.imgflip.com/30b1gx.jpg",
-                                      topText: "toptext",
-                                      bottomText: "bottomText"
-                                    })
-    const [allMemes, setAllMemes]= useState(memedata)
-    
-    function getMeme(){
-        const url=memedata.data.memes[Math.floor(Math.random()*memedata.data.memes.length)].url
-        setMeme( prevState=> ({
-            ...prevState, 
-            randomImage: url
-            
-        }))
-    }
-
-    return (
-        <div className="main">
-            {/* <h1>{yes}</h1> */}
-            {/* <h1>{arr}</h1> */}
-            {/* <button onClick={func}>{a.searchtext} {newicon}</button> */}
-
-            <div className="form" >
-                <input type="text" placeholder="top text" className="form--input"/>
-                <input type="text" placeholder="bottom text" className="form--input"/> 
-                <button className="submit--button" onClick={increment}>+</button>
-                <button className="submit--button" onClick={decrement}>-</button>
-                <Counter number={counter} />
-                {/* <button className="submit--button" onClick={getMeme}>Search</button> */}
-            </div>
-            {/* <div>
-                <h1 className="meme--text">{meme.topText}</h1>
-                <img src={meme.randomImage} className="meme--image"/>
-                <h1 className="meme--text">{meme.bottomText}</h1>
-            </div> */}
-            
-        </div>
-    )
+  return (
+    <div className="main">
+      <div className="form">
+        <input
+          type="text"
+          placeholder="top text"
+          className="form--input"
+          onChange={handleChange}
+          value={meme.topText}
+          name="topText"
+        />
+        <input
+          type="text"
+          placeholder="bottom text"
+          className="form--input"
+          onChange={handleChange}
+          value={meme.bottomText}
+          name="bottomText"
+        />
+        <button className="submit--button" onClick={getMeme}>
+          Search
+        </button>
+      </div>
+      <div className="meme">
+        <h1 className="top--text">{meme.topText}</h1>
+        <img src={meme.randomImage} className="meme--image" />
+        <h1 className="bottom--text">{meme.bottomText}</h1>
+      </div>
+    </div>
+  );
 }

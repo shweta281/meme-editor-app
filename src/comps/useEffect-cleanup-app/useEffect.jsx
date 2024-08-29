@@ -1,5 +1,5 @@
 import { useState } from "react"
-import WindowTracker from "../Window-Tracker.jsx"
+import WindowTracker from "./Window-Tracker.jsx"
 
 export default function Effect(){
     
